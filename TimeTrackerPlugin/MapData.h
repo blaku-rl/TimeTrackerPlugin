@@ -1,12 +1,9 @@
 #pragma once
 #include "nlohmann/json.hpp"
+#include "Constants.h"
 
 struct MapData {
 private:
-	static const int DAY_MULTIPLIER = 86400000;
-	static const int HOUR_MULTIPLIER = 3600000;
-	static const int MINUTE_MULTIPLIER = 60000;
-	static const int SECOND_MULTIPLIER = 1000;
 	std::string displayTime;
 
 public:

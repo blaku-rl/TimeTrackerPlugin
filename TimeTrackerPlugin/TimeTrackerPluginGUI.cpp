@@ -136,16 +136,16 @@ void TimeTrackerPlugin::UpdateNameFromBuffer() {
 }
 
 std::string TimeTrackerPlugin::FormatDisplayTime(long long time) {
-	long long days = time / 86400000;
-	long long remainingTime = time - (days * 86400000);
+	long long days = time / DAY_MULTIPLIER;
+	long long remainingTime = time - (days * DAY_MULTIPLIER);
 
-	long long hours = time / 3600000;
-	remainingTime = remainingTime - (hours * 3600000);
+	long long hours = time / HOUR_MULTIPLIER;
+	remainingTime = remainingTime - (hours * HOUR_MULTIPLIER);
 
-	long long minutes = remainingTime / 60000;
-	remainingTime = remainingTime - (minutes * 60000);
+	long long minutes = remainingTime / MINUTE_MULTIPLIER;
+	remainingTime = remainingTime - (minutes * MINUTE_MULTIPLIER);
 
-	long long seconds = remainingTime / 1000;
+	long long seconds = remainingTime / SECOND_MULTIPLIER;
 
 	return std::to_string(days) + " days, " + std::to_string(hours) + " hours, " + std::to_string(minutes) + " minutes, " + std::to_string(seconds) + " seconds";
 }
