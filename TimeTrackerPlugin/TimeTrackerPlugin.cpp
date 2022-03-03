@@ -13,6 +13,7 @@ void TimeTrackerPlugin::onLoad()
 	_globalCvarManager = cvarManager;
 	started = false;
 	maps = {};
+	count = 0;
 	defaultMapNames = {};
 	curMap = "";
 	std::filesystem::path timeTrackerFolder = gameWrapper->GetDataFolder() / "TimeTrackerData";
@@ -30,7 +31,7 @@ void TimeTrackerPlugin::onLoad()
 	mapTimesSorted = {};
 	ClearBuffer();
 
-	gameWrapper->HookEventPost("Function GameEvent_Soccar_TA.Countdown.BeginState", bind(&TimeTrackerPlugin::MapLoad, this, _1));
+	gameWrapper->HookEventPost("Function TAGame.GameEvent_Soccar_TA.InitField", bind(&TimeTrackerPlugin::MapLoad, this, _1));
 	gameWrapper->HookEventPost("Function TAGame.GameEvent_Soccar_TA.Destroyed", bind(&TimeTrackerPlugin::MapUnload, this, _1));
 	gameWrapper->HookEventPost("Function TAGame.GameEvent_Soccar_TA.EventMatchEnded", bind(&TimeTrackerPlugin::MapUnload, this, _1));
 	LoadMapData();
@@ -83,6 +84,12 @@ void TimeTrackerPlugin::CheckMapName()
 
 	for (int i = 0; i < mapName.size(); i++) {
 		mapName[i] = std::tolower(mapName[i]);
+	}
+
+	//Don't log main menu time
+	if (mapName == "menu_main_p") {
+		started = false;
+		return;
 	}
 
 	if(maps.find(mapName) == maps.end()){

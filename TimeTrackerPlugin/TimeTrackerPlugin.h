@@ -24,6 +24,7 @@ class TimeTrackerPlugin: public BakkesMod::Plugin::BakkesModPlugin, public Bakke
 
 	std::chrono::time_point<std::chrono::steady_clock> startTime;
 	bool started;
+	long long count;
 	std::map<std::string, MapData> maps;
 	std::map<std::string, std::string> defaultMapNames;
 	std::string curMap;
