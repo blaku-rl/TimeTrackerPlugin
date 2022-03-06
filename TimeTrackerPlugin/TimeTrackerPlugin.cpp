@@ -120,6 +120,10 @@ void TimeTrackerPlugin::LoadMapData()
 	mapNamesSorted = {};
 	mapTimesSorted = {};
 
+	if (!std::filesystem::exists(timeDataFilePath)) {
+		return;
+	}
+
 	auto dataIn = std::ifstream(timeDataFilePath);
 	nlohmann::json jsonMapData;
 	if (dataIn.is_open()) {
