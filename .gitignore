@@ -398,3 +398,6 @@ FodyWeavers.xsd
 *.sln.iml
 
 plugins/
+plugins/TimeTrackerPlugin.dll
+plugins/TimeTrackerPlugin.exp
+plugins/TimeTrackerPlugin.lib
