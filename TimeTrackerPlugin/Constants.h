@@ -1,6 +1,0 @@
-#pragma once
-
-const int DAY_MULTIPLIER = 86400000;
-const int HOUR_MULTIPLIER = 3600000;
-const int MINUTE_MULTIPLIER = 60000;
-const int SECOND_MULTIPLIER = 1000;

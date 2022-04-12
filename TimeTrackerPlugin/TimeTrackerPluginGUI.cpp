@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "TimeTrackerPlugin.h"
 #include "imgui/imgui_internal.h"
+#include "IMGUI/imgui_stdlib.h"
+#include "DayConvert.h"
 
 std::string TimeTrackerPlugin::GetPluginName() {
 	return "TimeTrackerPlugin";
@@ -26,7 +28,7 @@ void TimeTrackerPlugin::RenderSettings() {
 		}
 		
 		ImGui::Text("Current Map: %s", maps[curMap].displayName.c_str());
-		ImGui::Text("Current Session Length: %s", FormatDisplayTime(imGuiTimeDiff).c_str());
+		ImGui::Text("Current Session Length: %s", GetTimeString(imGuiTimeDiff).c_str());
 		ImGui::Separator();
 	}
 	ImGui::Text("Table Sort Method: ");
@@ -71,7 +73,7 @@ void TimeTrackerPlugin::RenderSettings() {
 		if (ImGui::Selectable(map.displayName.c_str(), rawName == imGuiSelectedMap, ImGuiSelectableFlags_SpanAllColumns | ImGuiSelectableFlags_AllowDoubleClick)) {
 			if (ImGui::IsMouseDoubleClicked(0)) {
 				imGuiSelectedMap = rawName;
-				LoadImGuiMapInBuffer(map.displayName);
+				newMapName = maps[rawName].displayName;
 				ImGui::OpenPopup("Edit Map Name");
 			}
 		}
@@ -79,7 +81,7 @@ void TimeTrackerPlugin::RenderSettings() {
 
 		ImGui::AlignTextToFramePadding();
 		if (curMap == rawName)
-			ImGui::Text(FormatDisplayTime(imGuiTimeDiff + map.timePlayed).c_str());
+			ImGui::Text(GetTimeString(imGuiTimeDiff + map.timePlayed).c_str());
 		else
 			ImGui::Text(map.GetDisplayTime().c_str());
 
@@ -94,11 +96,11 @@ void TimeTrackerPlugin::RenderSettings() {
 	{
 		ImGui::TextUnformatted("Name");
 		ImGui::SameLine();
-		ImGui::InputTextEx("##name", "", nameBuffer, sizeof(nameBuffer), ImVec2(0, 0), ImGuiTextFlags_None);
+		ImGui::InputText("##name", &newMapName);
 		ImGui::SetItemDefaultFocus();
 
 		if (ImGui::Button("Save", ImVec2(120, 0))) { 
-			UpdateNameFromBuffer();
+			UpdateName();
 			imGuiSelectedMap = "";
 			SortMapNames();
 			gameWrapper->Execute([this](GameWrapper* gw) {
@@ -115,37 +117,7 @@ void TimeTrackerPlugin::RenderSettings() {
 	}
 }
 
-void TimeTrackerPlugin::ClearBuffer() {
-	for (int i = 0; i < sizeof(nameBuffer); i++) {
-		nameBuffer[i] = 0;
-	}
-}
-
-void TimeTrackerPlugin::LoadImGuiMapInBuffer(std::string mapName) {
-	ClearBuffer();
-
-	for (int i = 0; i < sizeof(nameBuffer) || i < mapName.size(); i++) {
-		nameBuffer[i] = mapName[i];
-	}
-}
-
-void TimeTrackerPlugin::UpdateNameFromBuffer() {
+void TimeTrackerPlugin::UpdateName() {
 	if (maps.find(imGuiSelectedMap) == maps.end()) return;
-
-	maps[imGuiSelectedMap].displayName = std::string(nameBuffer);
-}
-
-std::string TimeTrackerPlugin::FormatDisplayTime(long long time) {
-	long long days = time / DAY_MULTIPLIER;
-	long long remainingTime = time - (days * DAY_MULTIPLIER);
-
-	long long hours = time / HOUR_MULTIPLIER;
-	remainingTime = remainingTime - (hours * HOUR_MULTIPLIER);
-
-	long long minutes = remainingTime / MINUTE_MULTIPLIER;
-	remainingTime = remainingTime - (minutes * MINUTE_MULTIPLIER);
-
-	long long seconds = remainingTime / SECOND_MULTIPLIER;
-
-	return std::to_string(days) + " days, " + std::to_string(hours) + " hours, " + std::to_string(minutes) + " minutes, " + std::to_string(seconds) + " seconds";
+	maps[imGuiSelectedMap].displayName = newMapName;
 }

@@ -34,7 +34,7 @@ class TimeTrackerPlugin: public BakkesMod::Plugin::BakkesModPlugin, public Bakke
 	bool shouldUpdateTime;
 	long long imGuiTimeDiff;
 	std::string imGuiSelectedMap;
-	char nameBuffer[100];
+	std::string newMapName;
 	int tableSortStyle;
 	bool isReversed;
 	std::vector<std::string> mapNamesSorted;
@@ -44,9 +44,6 @@ class TimeTrackerPlugin: public BakkesMod::Plugin::BakkesModPlugin, public Bakke
 	void RenderSettings() override;
 	std::string GetPluginName() override;
 	void SetImGuiContext(uintptr_t ctx) override;
-	void ClearBuffer();
-	void LoadImGuiMapInBuffer(std::string mapName);
-	void UpdateNameFromBuffer();
-	std::string FormatDisplayTime(long long time);
+	void UpdateName();
 };
 

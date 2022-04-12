@@ -1,6 +1,6 @@
 #pragma once
 #include "nlohmann/json.hpp"
-#include "Constants.h"
+#include "DayConvert.h"
 
 struct MapData {
 private:
@@ -11,9 +11,9 @@ public:
 	long long timePlayed;
 
 	MapData();
-	MapData(std::string name, long long time);
+	MapData(const std::string& name, const long long& time);
 
-	void AddTimePlayed(long long newTime);
+	void AddTimePlayed(const long long& newTime);
 	std::string GetDisplayTime();
 };
 

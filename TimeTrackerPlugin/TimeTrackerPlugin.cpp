@@ -25,11 +25,11 @@ void TimeTrackerPlugin::onLoad()
 	shouldUpdateTime = true;
 	imGuiTimeDiff = 0;
 	imGuiSelectedMap = "";
+	newMapName = "";
 	tableSortStyle = 0;
 	isReversed = false;
 	mapNamesSorted = {};
 	mapTimesSorted = {};
-	ClearBuffer();
 
 	gameWrapper->HookEventPost("Function TAGame.GameEvent_Soccar_TA.InitField", bind(&TimeTrackerPlugin::MapLoad, this, _1));
 	gameWrapper->HookEventPost("Function TAGame.GameEvent_Soccar_TA.Destroyed", bind(&TimeTrackerPlugin::MapUnload, this, _1));
